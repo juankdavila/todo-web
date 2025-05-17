@@ -1,0 +1,94 @@
+/* Estilos adicionales para la aplicación */
+
+/* Animación de entrada para las tareas */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para tareas completadas */
+.task-completed {
+    text-decoration: line-through;
+    color: #6b7280;
+}
+
+/* Toast de notificaciones */
+.toast-show {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+}
+
+.toast-success {
+    background-color: #10b981;
+}
+
+.toast-error {
+    background-color: #ef4444;
+}
+
+.toast-info {
+    background-color: #3b82f6;
+}
+
+/* Botones de acción */
+.btn-action:hover svg {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Efecto para checkboxes */
+.form-checkbox {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-checkbox:hover {
+    transform: scale(1.1);
+}
+
+/* Tarjetas de resumen */
+#total-tasks, #completed-tasks, #pending-tasks, #overdue-tasks {
+    transition: all 0.3s ease;
+}
+
+/* Barra de progreso */
+#progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+/* Elementos del formulario */
+input, select, textarea {
+    transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Estilos para fecha límite vencida */
+.deadline.overdue {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+/* Categorías */
+.category {
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+/* Transición para modal */
+#delete-modal {
+    transition: opacity 0.3s ease;
+}

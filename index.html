@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Tareas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-6">
+            <h1 class="text-3xl font-bold text-center" style="color: brown;">Gestor de Tareas</h1>
+            <p class="text-center text-gray-600">Organiza tus actividades de manera eficiente</p>
+        </header>
+
+
+        <!-- Formulario para añadir/editar tareas -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 id="form-title" class="text-xl font-semibold mb-4" style="color: brown;">Añadir Nueva Tarea</h2>
+            <form id="todo-form">
+                <input type="hidden" id="todo-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="mb-4">
+                        <label for="nombre" class="block text-gray-700 font-medium mb-2">Nombre</label>
+                        <input type="text" id="nombre" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="fecha-limite" class="block text-gray-700 font-medium mb-2">Fecha Límite (opcional)</label>
+                        <input type="date" id="fecha-limite" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="descripcion" class="block text-gray-700 font-medium mb-2">Descripción</label>
+                    <textarea id="descripcion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3"></textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    
+                    <div>
+                        <label for="category" class="block text-gray-700 font-medium mb-2">Categoría</label>
+                        <select id="category" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">Sin categoría</option>
+                            <option value="trabajo">Trabajo</option>
+                            <option value="personal">Personal</option>
+                            <option value="estudio">Estudio</option>
+                            <option value="salud">Salud</option>
+                            <option value="finanzas">Finanzas</option>
+                            <option value="hogar">Hogar</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center mt-6">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="estaCompleto" class="form-checkbox h-5 w-5 text-blue-600">
+                            <span class="ml-2 text-gray-700">Marcar como completada</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" id="cancel-btn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2 hover:bg-gray-400 hidden">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Guardar</button>
+                </div>
+            </form>
+        </div>
+        
+
+        <!-- Filtro, buscador y opciones -->
+        <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="col-span-1 md:col-span-2">
+                    <input type="text" id="search" placeholder="Buscar tareas..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <select id="filter" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">Todas</option>
+                        <option value="pending">Pendientes</option>
+                        <option value="completed">Completadas</option>
+                        
+                    </select>
+                </div>
+                <div>
+                    <select id="category" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">Todas las categorías</option>
+                        <option value="none">Sin categoría</option>
+                        <option value="trabajo">Trabajo</option>
+                        <option value="personal">Personal</option>
+                        <option value="estudio">Estudio</option>
+                        <option value="salud">Salud</option>
+                        <option value="finanzas">Finanzas</option>
+                        <option value="hogar">Hogar</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between mt-4">
+                <div>
+                    <label class="text-sm text-gray-600 block mb-1">Ordenar por:</label>
+                    <select id="sort-option" class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="date-desc">Fecha (recientes primero)</option>
+                        <option value="date-asc">Fecha (antiguas primero)</option>
+                        <option value="alpha-asc">Alfabético (A-Z)</option>
+                        <option value="alpha-desc">Alfabético (Z-A)</option>
+                        <option value="priority">Prioridad</option>
+                        <option value="deadline">Fecha límite</option>
+                    </select>
+                </div>
+                <div class="flex space-x-2 mt-4 md:mt-0">
+                    <button onclick="exportTasks()" class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Exportar
+                    </button>
+                    <button onclick="clearCompletedTasks()" class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Limpiar completadas
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de tareas -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <h2 class="bg-gray-50 px-6 py-3 text-lg font-semibold border-b" style="color: brown;">Mis Tareas</h2>
+            <div id="loading" class="text-center py-8 hidden">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-700 mx-auto"></div>
+                <p class="mt-2 text-gray-600">Cargando tareas...</p>
+            </div>
+            <div id="error-message" class="text-center py-8 text-red-600 hidden">
+                <p>Ocurrio un error al cargar las tareas. Inténtalo de nuevo.</p>
+            </div>
+            <ul id="todo-list" class="divide-y divide-gray-200">
+                <!-- Las tareas se cargarán aquí dinámicamente -->
+            </ul>
+            <div id="no-tasks" class="py-8 text-center text-gray-500 hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <p>No hay tareas disponibles.</p>
+                <p class="text-sm mt-1">¡Añade una nueva tarea para comenzar!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para eliminar -->
+    <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-xl font-semibold mb-4">Confirmar eliminación</h3>
+            <p class="mb-6">¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.</p>
+            <div class="flex justify-end">
+                <button id="cancel-delete" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2 hover:bg-gray-400">Cancelar</button>
+                <button id="confirm-delete" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast para notificaciones -->
+    <div id="toast" class="fixed bottom-4 right-4 px-4 py-2 rounded-md text-white transform translate-y-10 opacity-0 transition-all duration-300 z-50">
+        <!-- El contenido del toast se cargará dinámicamente -->
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+            <h2 class="text-lg font-semibold mb-3" style="color: brown;">Resumen</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="p-3 bg-blue-50 rounded-lg text-center">
+                    <span class="text-2xl font-bold text-blue-700" id="total-tasks">0</span>
+                    <p class="text-sm text-gray-600">Total</p>
+                </div>
+                <div class="p-3 bg-green-50 rounded-lg text-center">
+                    <span class="text-2xl font-bold text-green-600" id="completed-tasks">0</span>
+                    <p class="text-sm text-gray-600">Completadas</p>
+                </div>
+                <div class="p-3 bg-yellow-50 rounded-lg text-center">
+                    <span class="text-2xl font-bold text-yellow-600" id="pending-tasks">0</span>
+                    <p class="text-sm text-gray-600">Pendientes</p>
+                </div>
+                
+            </div>
+            <div class="mt-4">
+                <div class="flex justify-between mb-1">
+                    <span class="text-sm text-gray-600">Progreso</span>
+                    <span class="text-sm font-medium" id="progress-text">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
